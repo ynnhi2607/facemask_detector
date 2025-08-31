@@ -17,7 +17,7 @@ project/
 │── readme.md           # mô tả project
 │── requirements.txt    # dependencies
 │── model.keras         # model đã train sẵn
-│── silde/              # slide
+│── slide/              # slide
 ├── dataset_sample/     # dataset mẫu
 └── face_detector/      # pretrained face detector
      ├── deploy.prototxt
