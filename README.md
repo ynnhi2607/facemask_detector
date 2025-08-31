@@ -17,7 +17,7 @@ project/
 │── readme.md           # mô tả project
 │── requirements.txt    # dependencies
 │── model.keras         # model đã train sẵn
-│
+│── silde/              # slide
 ├── dataset_sample/     # dataset mẫu
 └── face_detector/      # pretrained face detector
      ├── deploy.prototxt
@@ -43,14 +43,14 @@ streamlit run app.py
 
 ## Công nghệ sử dụng
 
-### Cho ứng dụng (app.py)
+### Ứng dụng (app.py)
 - [Streamlit](https://streamlit.io/) – UI web app
 - [TensorFlow/Keras](https://www.tensorflow.org/) – Load & chạy model
 - [OpenCV](https://opencv.org/) – Phát hiện khuôn mặt (SSD Caffe model)
 - [Pillow](https://python-pillow.org/) – Xử lý ảnh đầu vào
 - [NumPy](https://numpy.org/) – Xử lý ma trận ảnh
 
-### Cho training (train.ipynb)
+### Training (train.ipynb)
 - [TensorFlow/Keras](https://www.tensorflow.org/) – xây dựng & train model
   - MobileNetV2 (pretrained model trên ImageNet)
   - Dense, GlobalAveragePooling2D, Dropout layers
