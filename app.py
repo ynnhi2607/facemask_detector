@@ -100,19 +100,39 @@ if page == "Ảnh":
     if choice == "Upload ảnh":
         uploaded_file = st.file_uploader("Chọn ảnh", type=["jpg", "jpeg", "png"])
         if uploaded_file:
-            pil_img = Image.open(uploaded_file).convert("RGB")
+            # Đọc ảnh bằng OpenCV
+            file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+            frame = cv2.imdecode(file_bytes, 1)
 
-            img = load_img(uploaded_file, target_size=(224, 224))
-            img_array = img_to_array(img) / 255.0
-            img_array = np.expand_dims(img_array, axis=0)
+            # Phát hiện khuôn mặt và dự đoán
+            locs, preds = detect_and_predict_mask(frame, faceNet, model)
 
-            pred = model.predict(img_array)
-            pred_class = int(np.argmax(pred, axis=1)[0])
-            confidence = float(np.max(pred) * 100)
+            # Vẽ kết quả
+            frame_result = annotate(frame.copy(), locs, preds)
 
-            st.image(pil_img,
-                     caption=f"Dự đoán: {CLASSES[pred_class]} ({confidence:.2f}%)",
-                     use_container_width=True)
+            # Hiển thị kết quả
+            st.image(cv2.cvtColor(frame_result, cv2.COLOR_BGR2RGB),
+                    caption="Kết quả nhận diện",
+                    use_container_width=True)
+             # Tạo bảng kết quả
+            results = []
+            for i, (box, pred) in enumerate(zip(locs, preds)):
+                (startX, startY, endX, endY) = box
+                (mask, withoutMask) = pred
+                label = "Mask" if mask > withoutMask else "No Mask"
+                confidence = max(mask, withoutMask) * 100
+                results.append({
+                    "Face": i + 1,
+                    "Vị trí": f"({startX},{startY})-({endX},{endY})",
+                    "Kết quả": label,
+                    "Độ tin cậy (%)": f"{confidence:.1f}"
+                })
+
+            if results:
+                st.write("### Chi tiết kết quả")
+                st.table(results)
+            else:
+                st.warning("Không phát hiện khuôn mặt nào trong ảnh.")
 
     elif choice == "Chụp ảnh webcam":
         run = st.checkbox("Bật webcam", key="webcam_upload")
