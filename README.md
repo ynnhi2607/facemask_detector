@@ -18,6 +18,7 @@ project/
 │── requirements.txt    # dependencies
 │── model.keras         # model đã train sẵn
 │── slide/              # slide
+├── old_version/        # model cũ, không fine-tuning
 ├── dataset_sample/     # dataset mẫu
 └── face_detector/      # pretrained face detector
      ├── deploy.prototxt
